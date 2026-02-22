@@ -1,0 +1,172 @@
+.skills-section {
+  background: var(--color-bg-alt);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.skill-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--card-color, var(--color-accent));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(99,102,241,.15);
+  }
+}
+
+.skill-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.skill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: rgba(0,0,0,.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--card-color, var(--color-accent));
+  }
+}
+
+.skill-tag {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--color-text-muted);
+  margin-bottom: 3px;
+}
+
+.skill-cat-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* Skill bars */
+.skill-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-bar-item {}
+
+.skill-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.skill-name {
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.skill-percent {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.skill-track {
+  height: 6px;
+  background: var(--color-border-light);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.skill-fill {
+  height: 100%;
+  background: var(--card-color, var(--color-accent));
+  border-radius: 100px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  animation: fillBar 1.2s cubic-bezier(.4,0,.2,1) forwards;
+
+  .revealed & {
+    // Will be set by inline width binding after reveal
+  }
+}
+
+@keyframes fillBar {
+  from { width: 0 !important; }
+}
+
+/* Tech cloud */
+.tech-cloud-section {
+  text-align: center;
+}
+
+.tech-cloud-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 28px;
+}
+
+.tech-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tech-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  padding: 8px 16px;
+  border-radius: 100px;
+  cursor: default;
+  transition: var(--transition);
+
+  &:hover {
+    background: rgba(99,102,241,.05);
+    border-color: var(--color-accent-light);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+}

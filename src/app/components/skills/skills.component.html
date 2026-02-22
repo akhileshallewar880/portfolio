@@ -1,0 +1,52 @@
+<section class="section skills-section" id="skills">
+  <div class="container">
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">// skills &amp; expertise</span>
+      <h2 class="section-title">My Tech <span>Stack</span></h2>
+      <p class="section-subtitle">Technologies I work with daily to build scalable, production-ready applications.</p>
+    </div>
+
+    <!-- Skill Categories -->
+    <div class="skills-grid">
+      @for (cat of categories; track cat.label; let i = $index) {
+        <div class="skill-card reveal" appScrollReveal [style.--card-color]="cat.color">
+          <div class="skill-card-header">
+            <div class="skill-icon" [innerHTML]="cat.icon | safeHtml"></div>
+            <div>
+              <span class="skill-tag">{{ cat.tag }}</span>
+              <h3 class="skill-cat-title">{{ cat.label }}</h3>
+            </div>
+          </div>
+
+          <div class="skill-bars">
+            @for (skill of cat.skills; track skill.name; let j = $index) {
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <span class="skill-percent">{{ skill.level }}%</span>
+                </div>
+                <div class="skill-track">
+                  <div
+                    class="skill-fill"
+                    [style.width.%]="skill.level"
+                    [style.animation-delay]="(j * 0.1) + 's'">
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Tech badges cloud -->
+    <div class="tech-cloud-section" appScrollReveal>
+      <h3 class="tech-cloud-title">All Technologies</h3>
+      <div class="tech-cloud">
+        @for (badge of techBadges; track badge; let i = $index) {
+          <span class="tech-badge" [style.animation-delay]="(i * 0.04) + 's'">{{ badge }}</span>
+        }
+      </div>
+    </div>
+  </div>
+</section>

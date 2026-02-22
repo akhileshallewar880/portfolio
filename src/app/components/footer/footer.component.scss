@@ -1,0 +1,138 @@
+.footer {
+  background: var(--color-text-primary);
+  color: rgba(255,255,255,.7);
+  padding: 56px 0 0;
+}
+
+.footer-inner {}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 48px;
+  align-items: start;
+  padding-bottom: 40px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* Brand */
+.footer-brand {}
+
+.footer-logo {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+  margin-bottom: 12px;
+
+  .bracket { color: var(--color-accent-light); }
+}
+
+.footer-tagline {
+  font-size: .88rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,.5);
+}
+
+/* Nav */
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  a {
+    font-size: .88rem;
+    color: rgba(255,255,255,.6);
+    cursor: pointer;
+    transition: var(--transition);
+
+    &:hover { color: #fff; }
+  }
+}
+
+/* Socials */
+.footer-socials {
+  display: flex;
+  gap: 10px;
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.7);
+    transition: var(--transition);
+
+    svg { width: 18px; height: 18px; }
+
+    &:hover {
+      background: rgba(99,102,241,.3);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* Divider */
+.footer-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+}
+
+/* Bottom */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+.footer-copy {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .82rem;
+  color: rgba(255,255,255,.4);
+
+  strong { color: rgba(255,255,255,.7); font-weight: 600; }
+
+  svg { flex-shrink: 0; }
+}
+
+.scroll-top-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.6);
+  transition: var(--transition);
+
+  &:hover {
+    background: var(--color-accent);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+}

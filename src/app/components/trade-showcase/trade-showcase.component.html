@@ -1,0 +1,253 @@
+<!-- ==========================================
+     TRADE SHOWCASE — VanTrade Immersive Demo
+     ========================================== -->
+<div class="trade-wrapper" #tradeSection>
+
+  <!-- Intro -->
+  <div class="trade-intro">
+    <div class="container">
+      <div class="intro-badge">
+        <span class="ai-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          GenAI Project
+        </span>
+      </div>
+      <h2 class="intro-headline">
+        Meet <span class="trade-gradient">VanTrade</span>
+      </h2>
+      <p class="intro-tagline">GPT-4 scans the NSE. Signals the trade. Executes automatically.</p>
+      <p class="intro-desc">
+        An algorithmic trading engine that combines multi-factor screening, AI-powered technical analysis,
+        and one-tap order execution through Zerodha Kite Connect.
+      </p>
+      <div class="intro-stack">
+        <span class="chip-py">Python</span>
+        <span class="chip-ai">GPT-4</span>
+        <span class="chip-api">FastAPI</span>
+        <span class="chip-flutter">Flutter</span>
+        <span class="chip-zerodha">Zerodha API</span>
+        <span class="chip-data">Pandas/NumPy</span>
+      </div>
+      <div class="scroll-hint">
+        <div class="scroll-hint-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </div>
+        Scroll to explore the trading flow
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky showcase -->
+  <div class="trade-sticky-container">
+    <div class="trade-sticky-viewport"
+         [style.--t-from]="activeSlide.gradientFrom"
+         [style.--t-to]="activeSlide.gradientTo"
+         [style.--t-accent]="activeSlide.accentColor">
+
+      <!-- Animated BG layers -->
+      @for (slide of slides; track slide.id) {
+        <div class="t-bg-layer" [class.active]="activeIndex() === slide.id"
+             [style.background]="'linear-gradient(135deg,' + slide.gradientFrom + '18,' + slide.gradientTo + '08)'">
+        </div>
+      }
+
+      <!-- Grid pattern overlay -->
+      <div class="trade-grid-bg"></div>
+
+      <!-- Ambient orbs -->
+      <div class="t-orb t-orb-1" [style.background]="'radial-gradient(circle,' + activeSlide.accentColor + '22, transparent 70%)'"></div>
+      <div class="t-orb t-orb-2" [style.background]="'radial-gradient(circle,' + activeSlide.gradientFrom + '18, transparent 70%)'"></div>
+
+      <div class="trade-layout">
+
+        <!-- LEFT: Content -->
+        <div class="t-content-panel">
+          <!-- Counter -->
+          <div class="t-counter">
+            <span class="t-num">0{{ activeIndex() + 1 }}</span>
+            <span class="t-sep">/</span>
+            <span class="t-total">0{{ slides.length }}</span>
+          </div>
+
+          <!-- AI chip label -->
+          @for (slide of slides; track slide.id) {
+            @if (activeIndex() === slide.id) {
+              <div class="t-chip" [style.background]="slide.accentColor + '18'" [style.borderColor]="slide.accentColor + '35'" [style.color]="slide.accentColor">
+                {{ slide.chipIcon }} {{ slide.chipLabel }}
+              </div>
+            }
+          }
+
+          <!-- Tag -->
+          @for (slide of slides; track slide.id) {
+            @if (activeIndex() === slide.id) {
+              <div class="t-tag">{{ slide.tag }}</div>
+            }
+          }
+
+          <!-- Headline -->
+          <div class="t-headline-wrap">
+            @for (slide of slides; track slide.id) {
+              @if (activeIndex() === slide.id) {
+                <h3 class="t-headline">
+                  {{ slide.headline }}<br>
+                  <span class="t-subline" [style.color]="slide.accentColor">{{ slide.subline }}</span>
+                </h3>
+              }
+            }
+          </div>
+
+          <!-- Screen name badge -->
+          <div class="t-screen-badge"
+               [style.background]="activeSlide.accentColor + '12'"
+               [style.borderColor]="activeSlide.accentColor + '30'"
+               [style.color]="activeSlide.accentColor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            {{ activeSlide.screen }}
+          </div>
+
+          <!-- Description -->
+          @for (slide of slides; track slide.id) {
+            @if (activeIndex() === slide.id) {
+              <p class="t-desc">{{ slide.description }}</p>
+            }
+          }
+
+          <!-- Highlights -->
+          @for (slide of slides; track slide.id) {
+            @if (activeIndex() === slide.id) {
+              <ul class="t-highlights">
+                @for (h of slide.highlights; track h; let j = $index) {
+                  <li [style.animation-delay]="(j * 0.08) + 's'">
+                    <span class="t-dot" [style.background]="slide.accentColor"></span>
+                    {{ h }}
+                  </li>
+                }
+              </ul>
+            }
+          }
+
+          <!-- Progress -->
+          <div class="t-progress-track">
+            <div class="t-progress-fill"
+                 [style.width.%]="scrollProgress() * 100"
+                 [style.background]="'linear-gradient(90deg,' + activeSlide.gradientFrom + ',' + activeSlide.accentColor + ')'">
+            </div>
+          </div>
+
+          <!-- Dot nav -->
+          <div class="t-dot-nav">
+            @for (slide of slides; track slide.id; let i = $index) {
+              <button class="t-dot"
+                      [class.active]="activeIndex() === i"
+                      [style.background]="activeIndex() === i ? slide.accentColor : ''"
+                      (click)="goToSlide(i)"
+                      [attr.aria-label]="'Go to ' + slide.screen">
+              </button>
+            }
+          </div>
+
+          <!-- CTA -->
+          <a href="https://github.com/akhileshallewar880/AutoTradingApp"
+             target="_blank"
+             rel="noopener"
+             class="t-cta"
+             [style.background]="'linear-gradient(135deg,' + activeSlide.gradientFrom + ',' + activeSlide.accentColor + ')'">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+
+        <!-- CENTER: Phone mockup -->
+        <div class="t-phone-center">
+          <div class="t-phone-frame">
+
+            <!-- Floating live ticker (decoration) -->
+            <div class="t-ticker-badge" [style.background]="activeSlide.accentColor">
+              <span class="ticker-dot"></span>
+              NSE Live
+            </div>
+
+            <!-- Phone shell -->
+            <div class="t-phone-shell">
+              <div class="t-phone-notch">
+                <div class="t-notch-camera"></div>
+                <div class="t-notch-speaker"></div>
+              </div>
+
+              <div class="t-phone-screen">
+                @for (slide of slides; track slide.id) {
+                  <img
+                    [src]="slide.image"
+                    [alt]="slide.screen"
+                    class="t-screen-img"
+                    [class.active]="activeIndex() === slide.id"
+                    [class.exit-up]="activeIndex() > slide.id"
+                    [class.enter-down]="activeIndex() < slide.id"
+                    loading="lazy">
+                }
+              </div>
+
+              <div class="t-home-bar"></div>
+            </div>
+
+            <!-- Screen label on phone -->
+            <div class="t-phone-label" [style.background]="activeSlide.accentColor">
+              {{ activeSlide.screen }}
+            </div>
+
+            <!-- Glow -->
+            <div class="t-phone-glow"
+                 [style.background]="'radial-gradient(ellipse,' + activeSlide.accentColor + '40, transparent 70%)'">
+            </div>
+
+            <!-- Reflection -->
+            <div class="t-phone-reflection"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Thumbnail strip -->
+        <div class="t-thumb-strip">
+          <span class="t-strip-label">All Screens</span>
+          @for (slide of slides; track slide.id; let i = $index) {
+            <button class="t-thumb"
+                    [class.active]="activeIndex() === i"
+                    [style.--ta]="slide.accentColor"
+                    (click)="goToSlide(i)"
+                    [attr.aria-label]="'Go to ' + slide.screen">
+              <img [src]="slide.image" [alt]="slide.screen" loading="lazy">
+              <div class="t-thumb-overlay" [class.active]="activeIndex() === i"></div>
+              <span class="t-thumb-name">{{ slide.screen.split(' ')[0] }}</span>
+            </button>
+          }
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Outro stats -->
+  <div class="trade-outro">
+    <div class="container">
+      <div class="outro-stats">
+        <div class="o-stat">
+          <strong>NSE</strong>
+          <span>Full Market Scan</span>
+        </div>
+        <div class="o-stat">
+          <strong>GPT-4</strong>
+          <span>AI Analysis Engine</span>
+        </div>
+        <div class="o-stat">
+          <strong>3</strong>
+          <span>Indicators Analyzed</span>
+        </div>
+        <div class="o-stat">
+          <strong>1-tap</strong>
+          <span>Order Execution</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
