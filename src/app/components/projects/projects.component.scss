@@ -251,3 +251,20 @@
     }
   }
 }
+
+
+/* Enterprise note (no GitHub link) */
+.enterprise-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .82rem;
+  color: var(--color-text-muted, #6b7280);
+  background: rgba(99, 102, 241, .06);
+  border: 1px solid rgba(99, 102, 241, .15);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-style: italic;
+
+  svg { opacity: .7; flex-shrink: 0; }
+}

@@ -14,12 +14,12 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   roles = [
-    'Scalable Web Applications',
-    'Cloud-Native .NET Backends',
-    'AI-Powered GenAI Systems',
-    'Real-Time Angular Frontends',
-    'Intelligent RAG Pipelines',
-    'Enterprise Azure Solutions'
+    'Enterprise .NET Backends',
+    'Scalable Angular Frontends',
+    'AI-Powered RAG Pipelines',
+    'Cloud-Native Azure Solutions',
+    'ML Analytics Dashboards',
+    'GenAI Productivity Tools'
   ];
 
   displayText = '';
