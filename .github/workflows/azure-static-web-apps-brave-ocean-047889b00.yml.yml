@@ -1,22 +1,14 @@
-name: Deploy to Azure Static Web Apps
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
 
 jobs:
   build_and_deploy:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -35,36 +27,65 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --configuration production
 
-      - name: Install OIDC Client
-        run: npm install @actions/core@1.6.0 @actions/http-client
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 187.127.130.128 >> ~/.ssh/known_hosts
 
-      - name: Get OIDC Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-          script: |
-            const coredemo = require('@actions/core')
-            return await coredemo.getIDToken()
-          result-encoding: string
+      - name: Prepare VPS server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@187.127.130.128 bash <<'REMOTE'
+          set -e
+          if ! command -v nginx &>/dev/null; then
+            apt-get update -qq && apt-get install -y nginx
+          fi
+          mkdir -p /var/www/portfolio
+          rm -rf /var/www/portfolio/*
+          REMOTE
 
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_OCEAN_047889B00 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: 'upload'
-          app_location: '/'
-          output_location: 'dist/portfolio-app/browser'
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+      - name: Upload build files
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            dist/portfolio-app/browser/ \
+            root@187.127.130.128:/var/www/portfolio/
 
-  close_pull_request:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request
+      - name: Configure nginx and reload
+        run: |
+          ssh -o StrictHostKeyChecking=no root@187.127.130.128 bash <<'REMOTE'
+          set -e
+          cat > /etc/nginx/sites-available/portfolio <<'NGINX'
+          server {
+              listen 80;
+              listen [::]:80;
+              server_name 187.127.130.128 portfolio.vantrade.in;
 
-    steps:
-      - name: Close Pull Request
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_OCEAN_047889B00 }}
-          action: 'close'
+              root /var/www/portfolio;
+              index index.html;
+
+              location / {
+                  try_files $uri $uri/ /index.html;
+              }
+
+              location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+                  expires 1y;
+                  add_header Cache-Control "public, immutable";
+              }
+
+              add_header X-Frame-Options "SAMEORIGIN";
+              add_header X-Content-Type-Options "nosniff";
+              add_header X-XSS-Protection "1; mode=block";
+
+              gzip on;
+              gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript;
+              gzip_min_length 1000;
+          }
+          NGINX
+          ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/portfolio
+          rm -f /etc/nginx/sites-enabled/default
+          nginx -t
+          systemctl enable nginx
+          systemctl reload nginx
+          REMOTE
